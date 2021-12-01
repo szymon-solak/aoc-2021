@@ -4,11 +4,18 @@
 
 (defn get-depth [measurements]
   (->> measurements
-       (map #(Integer/parseInt %))
        (partition 2 1)
        (filter #(> (second %) (first %)))
        (count)))
 
-(defn main
+(defn get-depth-from-sums [measurements]
+  (->> measurements
+       (partition 3 1)
+       (map #(reduce + %))
+       (get-depth)))
+
+(defn -main
   [& args]
-  (println (get-depth (str/split-lines (slurp "src/day_1/input.txt")))))
+  (let [measurements (map #(Integer/parseInt %) (str/split-lines (slurp "src/day_1/input.txt")))]
+    (println (str "part 1: " (get-depth measurements)))
+    (println (str "part 2: " (get-depth-from-sums measurements)))))
